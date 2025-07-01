@@ -1,9 +1,17 @@
 package main
 
-import "github.com/Gromp-13/IronGym/internal/ui/screens"
+import (
+	"github.com/Gromp-13/IronGym/internal/config"
+	"github.com/Gromp-13/IronGym/internal/ui/screens"
+)
 
 func main() {
 
-	screens.Screens()
+	p := 0
+	if p == 5 {
+		screens.NewClientScreen()
+	}
+
+	config.ConfScreen()
 
 }

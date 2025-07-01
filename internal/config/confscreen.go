@@ -1,4 +1,4 @@
-package screens
+package config
 
 import (
 	"fyne.io/fyne/v2"
@@ -8,10 +8,10 @@ import (
 	"fyne.io/fyne/v2/widget"
 )
 
-func NewClientScreen() {
+func ConfScreen() {
 	a := app.New()
-	window := a.NewWindow("Новый клиент")
-	window.Resize(fyne.NewSize(400, 400))
+	window := a.NewWindow("IronGym")
+	window.Resize(fyne.NewSize(1000, 600))
 	a.Settings().SetTheme(theme.DarkTheme())
 
 	label := widget.NewLabel("hello")
