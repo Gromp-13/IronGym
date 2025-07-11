@@ -3,11 +3,11 @@ package main
 import "time"
 
 type User struct {
-	User_id    int32
-	LastName   string
-	FirstName  string
-	Patronymic string
-	Phone      string
-	BirthDate  time.Time
-	Barcode    string
+	User_id     int32
+	LastName    string
+	FirstName   string
+	MiddleName  string
+	PhoneNumber string
+	BirthDate   time.Time
+	CardBarcode string
 }

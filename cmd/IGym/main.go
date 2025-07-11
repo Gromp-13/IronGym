@@ -6,6 +6,6 @@ import (
 
 func main() {
 
-	config.ConfScreen()
+	config.Config()
 
 }

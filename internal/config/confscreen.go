@@ -11,8 +11,8 @@ import (
 
 func ConfScreen() {
 	a := app.New()
-	window := a.NewWindow("IronGym")
-	window.Resize(fyne.NewSize(1000, 600))
+	windowMaster := a.NewWindow("IronGym")
+	windowMaster.Resize(fyne.NewSize(1000, 600))
 	a.Settings().SetTheme(theme.DarkTheme())
 
 	file_item1 := fyne.NewMenuItem("новый клиет", func() {
@@ -24,7 +24,8 @@ func ConfScreen() {
 	menu1 := fyne.NewMenu("Клиенты", file_item1, file_item2)
 
 	main_menu := fyne.NewMainMenu(menu1)
-	window.SetMainMenu(main_menu)
+	windowMaster.SetMainMenu(main_menu)
 
-	window.ShowAndRun()
+	windowMaster.Show()
+	windowMaster.SetMaster()
 }

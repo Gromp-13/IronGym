@@ -12,8 +12,8 @@ import (
 
 func NewClientScreen() {
 	a := app.New()
-	window := a.NewWindow("Новый клиент")
-	window.Resize(fyne.NewSize(400, 450))
+	windowNCS := a.NewWindow("Новый клиент")
+	windowNCS.Resize(fyne.NewSize(400, 450))
 	a.Settings().SetTheme(theme.DarkTheme())
 
 	label := widget.NewLabel("РЕГИСТРАЦИЯ")
@@ -59,7 +59,6 @@ func NewClientScreen() {
 		save,
 	)
 
-	window.SetContent(cont)
+	windowNCS.SetContent(cont)
 
-	window.ShowAndRun()
 }
