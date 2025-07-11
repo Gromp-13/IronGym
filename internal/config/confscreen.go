@@ -10,13 +10,13 @@ import (
 )
 
 func ConfScreen() {
-	a := app.New()
-	windowMaster := a.NewWindow("IronGym")
+	myApp := app.New()
+	windowMaster := myApp.NewWindow("IronGym")
 	windowMaster.Resize(fyne.NewSize(1000, 600))
-	a.Settings().SetTheme(theme.DarkTheme())
+	myApp.Settings().SetTheme(theme.DarkTheme())
 
 	file_item1 := fyne.NewMenuItem("новый клиет", func() {
-		screens.NewClientScreen()
+		screens.NewClientScreen(myApp)
 	})
 	file_item2 := fyne.NewMenuItem("продажа абонемента", func() {
 		fmt.Println("продажа абонемента")
@@ -28,4 +28,5 @@ func ConfScreen() {
 
 	windowMaster.Show()
 	windowMaster.SetMaster()
+	myApp.Run()
 }

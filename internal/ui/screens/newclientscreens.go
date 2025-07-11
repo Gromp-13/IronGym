@@ -4,16 +4,15 @@ import (
 	"fmt"
 
 	"fyne.io/fyne/v2"
-	"fyne.io/fyne/v2/app"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
 )
 
-func NewClientScreen() {
-	a := app.New()
+func NewClientScreen(a fyne.App) {
+
 	windowNCS := a.NewWindow("Новый клиент")
-	windowNCS.Resize(fyne.NewSize(400, 450))
+	windowNCS.Resize(fyne.NewSize(400, 500))
 	a.Settings().SetTheme(theme.DarkTheme())
 
 	label := widget.NewLabel("РЕГИСТРАЦИЯ")
@@ -45,9 +44,25 @@ func NewClientScreen() {
 	birthdate.Move(fyne.NewPos(50, 290))
 	birthdate.SetPlaceHolder("Штрихкод карты")
 
+	selectpas := widget.NewSelect(
+		[]string{
+			"Мужской",
+			"Женский",
+			"Студенчиски",
+			"Пенсионный",
+		},
+
+		func(s string) {
+			fmt.Printf("Select is %s", s)
+		},
+	)
+	selectpas.Resize(fyne.NewSize(300, 40))
+	selectpas.Move(fyne.NewPos(50, 350))
+	selectpas.PlaceHolder = "Выберити абонимент"
+
 	save := widget.NewButton("Сохранить", func() { fmt.Println("hi") })
 	save.Resize(fyne.NewSize(200, 40))
-	save.Move(fyne.NewPos(100, 360))
+	save.Move(fyne.NewPos(100, 410))
 
 	cont := container.NewWithoutLayout(
 		label,
@@ -56,9 +71,11 @@ func NewClientScreen() {
 		patronymic,
 		phone,
 		birthdate,
+		selectpas,
 		save,
 	)
 
 	windowNCS.SetContent(cont)
+	windowNCS.Show()
 
 }

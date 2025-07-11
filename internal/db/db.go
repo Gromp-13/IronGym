@@ -1,4 +1,9 @@
-package postgresql
+package db
 
-type Client interface {
+import "github.com/jackc/pgx/v5"
+
+type Conectdb interface {
+
+	conn, err := pgx
+
 }
