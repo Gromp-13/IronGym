@@ -2,6 +2,7 @@ package db
 
 import (
 	"context"
+	"fmt"
 	"log"
 
 	"github.com/jackc/pgx/v5"
@@ -9,13 +10,14 @@ import (
 
 func Conectdb() {
 
-	conn, err := pgx.Connect(context.Background(), "postgres://postgres:pass@localhost:5432/irongum")
+	conn, err := pgx.Connect(context.Background(), "postgres://postgres:@localhost:5432/irongumdb")
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal(err.Error())
 	}
 
 	defer conn.Close(context.Background())
 
-	_ = conn
+	row := conn.QueryRow(context.Background(), "SELECT * FROM clients;")
+	fmt.Println(row)
 
 }
