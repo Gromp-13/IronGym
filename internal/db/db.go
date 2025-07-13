@@ -18,6 +18,4 @@ func Conectdb() {
 
 	_ = conn
 
-	conn.
-
 }
