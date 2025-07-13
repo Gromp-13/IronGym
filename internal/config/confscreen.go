@@ -29,4 +29,5 @@ func ConfScreen() {
 	windowMaster.Show()
 	windowMaster.SetMaster()
 	myApp.Run()
+
 }

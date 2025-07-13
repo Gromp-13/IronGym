@@ -1,9 +1,23 @@
 package db
 
-import "github.com/jackc/pgx/v5"
+import (
+	"context"
+	"log"
 
-type Conectdb interface {
+	"github.com/jackc/pgx/v5"
+)
 
-	conn, err := pgx
+func Conectdb() {
+
+	conn, err := pgx.Connect(context.Background(), "postgres://postgres:pass@localhost:5432/irongum")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	defer conn.Close(context.Background())
+
+	_ = conn
+
+	conn.
 
 }
