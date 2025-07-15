@@ -5,14 +5,16 @@ import (
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
+	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/theme"
+	"fyne.io/fyne/v2/widget"
 	"github.com/Gromp-13/IronGym/internal/ui/screens"
 )
 
 func ConfScreen() {
 	myApp := app.New()
 	windowMaster := myApp.NewWindow("IronGym")
-	windowMaster.Resize(fyne.NewSize(1000, 600))
+	windowMaster.Resize(fyne.NewSize(1100, 700))
 	myApp.Settings().SetTheme(theme.DarkTheme())
 
 	file_item1 := fyne.NewMenuItem("новый клиет", func() {
@@ -26,6 +28,83 @@ func ConfScreen() {
 	main_menu := fyne.NewMainMenu(menu1)
 	windowMaster.SetMainMenu(main_menu)
 
+	scrollclients := container.NewVScroll(
+		container.NewVBox(
+			widget.NewLabel("1"),
+			widget.NewLabel("2"),
+			widget.NewLabel("3"),
+			widget.NewLabel("4"),
+			widget.NewLabel("5"),
+			widget.NewLabel("6"),
+			widget.NewLabel("7"),
+			widget.NewLabel("8"),
+			widget.NewLabel("9"),
+			widget.NewLabel("10"),
+			widget.NewLabel("11"),
+			widget.NewLabel("12"),
+			widget.NewLabel("13"),
+			widget.NewLabel("14"),
+			widget.NewLabel("15"),
+			widget.NewLabel("16"),
+			widget.NewLabel("17"),
+			widget.NewLabel("18"),
+			widget.NewLabel("19"),
+			widget.NewLabel("20"),
+			widget.NewLabel("21"),
+			widget.NewLabel("22"),
+			widget.NewLabel("23"),
+			widget.NewLabel("24"),
+			widget.NewLabel("25"),
+			widget.NewLabel("26"),
+		),
+	)
+	scrollclients.Resize(fyne.NewSize(500, 400))
+	scrollclients.Move(fyne.NewPos(10, 5))
+
+	btn1 := widget.NewButton(">", func() { fmt.Println(">") })
+	btn1.Resize(fyne.NewSize(20, 20))
+	btn1.Move(fyne.NewPos(540, 170))
+
+	btn2 := widget.NewButton("<", func() { fmt.Println("<") })
+	btn2.Resize(fyne.NewSize(20, 20))
+	btn2.Move(fyne.NewPos(540, 210))
+
+	scrollclientstrening := container.NewVScroll(
+		container.NewVBox(
+			widget.NewLabel("1"),
+			widget.NewLabel("2"),
+			widget.NewLabel("3"),
+			widget.NewLabel("4"),
+			widget.NewLabel("5"),
+			widget.NewLabel("6"),
+			widget.NewLabel("7"),
+			widget.NewLabel("8"),
+			widget.NewLabel("9"),
+			widget.NewLabel("10"),
+			widget.NewLabel("11"),
+			widget.NewLabel("12"),
+			widget.NewLabel("13"),
+			widget.NewLabel("14"),
+			widget.NewLabel("15"),
+			widget.NewLabel("16"),
+			widget.NewLabel("17"),
+			widget.NewLabel("18"),
+			widget.NewLabel("19"),
+			widget.NewLabel("20"),
+			widget.NewLabel("21"),
+			widget.NewLabel("22"),
+			widget.NewLabel("23"),
+			widget.NewLabel("24"),
+			widget.NewLabel("25"),
+			widget.NewLabel("26"),
+		),
+	)
+	scrollclientstrening.Resize(fyne.NewSize(500, 400))
+	scrollclientstrening.Move(fyne.NewPos(580, 5))
+
+	cont := container.NewWithoutLayout(scrollclients, btn1, btn2, scrollclientstrening)
+
+	windowMaster.SetContent(cont)
 	windowMaster.Show()
 	windowMaster.SetMaster()
 	myApp.Run()
