@@ -58,7 +58,7 @@ func NewClientScreen(a fyne.App) {
 	)
 	selectpas.Resize(fyne.NewSize(300, 40))
 	selectpas.Move(fyne.NewPos(50, 350))
-	selectpas.PlaceHolder = "Выберити абонимент"
+	selectpas.PlaceHolder = "Выберити абонемент"
 
 	save := widget.NewButton("Сохранить", func() { fmt.Println("hi") })
 	save.Resize(fyne.NewSize(200, 40))

@@ -28,6 +28,16 @@ func ConfScreen() {
 	main_menu := fyne.NewMainMenu(menu1)
 	windowMaster.SetMainMenu(main_menu)
 
+	searchlastname := widget.NewEntry()
+	searchlastname.Resize(fyne.NewSize(150, 36))
+	searchlastname.Move(fyne.NewPos(10, 5))
+	searchlastname.SetPlaceHolder("Поиск по фамилии")
+
+	searchbarcode := widget.NewEntry()
+	searchbarcode.Resize(fyne.NewSize(150, 36))
+	searchbarcode.Move(fyne.NewPos(170, 5))
+	searchbarcode.SetPlaceHolder("Поиск по карте")
+
 	scrollclients := container.NewVScroll(
 		container.NewVBox(
 			widget.NewLabel("1"),
@@ -59,7 +69,7 @@ func ConfScreen() {
 		),
 	)
 	scrollclients.Resize(fyne.NewSize(500, 400))
-	scrollclients.Move(fyne.NewPos(10, 5))
+	scrollclients.Move(fyne.NewPos(10, 50))
 
 	btn1 := widget.NewButton(">", func() { fmt.Println(">") })
 	btn1.Resize(fyne.NewSize(20, 20))
@@ -100,9 +110,21 @@ func ConfScreen() {
 		),
 	)
 	scrollclientstrening.Resize(fyne.NewSize(500, 400))
-	scrollclientstrening.Move(fyne.NewPos(580, 5))
+	scrollclientstrening.Move(fyne.NewPos(580, 50))
 
-	cont := container.NewWithoutLayout(scrollclients, btn1, btn2, scrollclientstrening)
+	onetimesub := widget.NewButton("Разовый абонемент", func() { fmt.Println("Разовый") })
+	onetimesub.Resize(fyne.NewSize(175, 40))
+	onetimesub.Move(fyne.NewPos(875, 475))
+
+	cont := container.NewWithoutLayout(
+		searchbarcode,
+		searchlastname,
+		scrollclients,
+		btn1,
+		btn2,
+		scrollclientstrening,
+		onetimesub,
+	)
 
 	windowMaster.SetContent(cont)
 	windowMaster.Show()
