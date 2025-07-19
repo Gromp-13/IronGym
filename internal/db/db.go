@@ -31,18 +31,18 @@ func Conectdb() {
 		log.Fatal("DB_URL не задан")
 	}
 
-	bd, err = repository.New(DBURL)
+	bd, err := repository.New(DBURL)
 	if err != nil {
 		log.Fatal(err.Error())
 	}
 
-	data, err := bd.GetClients()
+	data, err := bd.GetClient()
 	if err != nil {
 		log.Fatal(err.Error())
 	}
 
 	for _, item := range data {
-		fmt.Printf("%d: %s, lastname: %d, firstname: %d, middlename: %d, phonenumber: %d, birthdate: %d, cardbarcode: %d",
+		fmt.Printf("%d: %s, lastname: %d, firstname: %d, middlename: %d, phonenumber: %d, birthdate: %d, cardbarcode: %d\n",
 			item.ID, item.LastName, item.FirstName, item.MiddleName, item.PhoneNumber, item.BirthDate, item.CardBarcode)
 	}
 

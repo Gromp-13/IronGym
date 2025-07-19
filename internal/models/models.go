@@ -2,7 +2,7 @@ package models
 
 import "time"
 
-type Clients struct {
+type Client struct {
 	ID          int32
 	LastName    string
 	FirstName   string

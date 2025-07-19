@@ -6,7 +6,7 @@ import (
 	"github.com/Gromp-13/IronGym/internal/models"
 )
 
-func (repo *PGRepo) GetClients() ([]models.Clients, error) {
+func (repo *PGRepo) GetClient() ([]models.Client, error) {
 	rows, err := repo.pool.Query(context.Background(), `
 	SELECT id, lastname, firstname, middlename, phonenumber, birthdate, cardbarcode 
 	FROM clients;
@@ -16,9 +16,9 @@ func (repo *PGRepo) GetClients() ([]models.Clients, error) {
 	}
 	defer rows.Close()
 
-	var data []models.Clients
+	var data []models.Client
 	for rows.Next() {
-		var item models.Clients
+		var item models.Client
 		err = rows.Scan(
 			&item.ID,
 			&item.LastName,
@@ -36,4 +36,20 @@ func (repo *PGRepo) GetClients() ([]models.Clients, error) {
 	}
 
 	return data, nil
+}
+
+func (repo *PGRepo) CreateClients(item models.Client) error {
+	repo.mu.Lock()
+	defer repo.mu.Unlock()
+	_, err := repo.pool.Exec(context.Background(), `
+	INSERT INTO clients (lastname, firstname, middlename, phonenumber, birthdate, cardbarcode)
+	VALUES $1, $2, $3, $4, $5, $6`,
+		item.LastName,
+		item.FirstName,
+		item.MiddleName,
+		item.PhoneNumber,
+		item.BirthDate,
+		item.CardBarcode,
+	)
+	return err
 }
