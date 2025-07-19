@@ -38,38 +38,18 @@ func ConfScreen() {
 	searchbarcode.Move(fyne.NewPos(170, 5))
 	searchbarcode.SetPlaceHolder("Поиск по карте")
 
-	scrollclients := container.NewVScroll(
-		container.NewVBox(
-			widget.NewLabel("1"),
-			widget.NewLabel("2"),
-			widget.NewLabel("3"),
-			widget.NewLabel("4"),
-			widget.NewLabel("5"),
-			widget.NewLabel("6"),
-			widget.NewLabel("7"),
-			widget.NewLabel("8"),
-			widget.NewLabel("9"),
-			widget.NewLabel("10"),
-			widget.NewLabel("11"),
-			widget.NewLabel("12"),
-			widget.NewLabel("13"),
-			widget.NewLabel("14"),
-			widget.NewLabel("15"),
-			widget.NewLabel("16"),
-			widget.NewLabel("17"),
-			widget.NewLabel("18"),
-			widget.NewLabel("19"),
-			widget.NewLabel("20"),
-			widget.NewLabel("21"),
-			widget.NewLabel("22"),
-			widget.NewLabel("23"),
-			widget.NewLabel("24"),
-			widget.NewLabel("25"),
-			widget.NewLabel("26"),
-		),
+	names := []string{"Rnt", "wcbh", "EOVIMEO", "EVPM", "EOWNV", "wovnjuow", "wovnwoun", "wpvmiwpjij",
+		"oenvbe", "pwjvh", "kmvoiewn", "w;kmvowin", "powmvoi", "w[ojvmiwjh]", "pwomvih", "[wpovj0wv90]"}
+
+	listFulClients := widget.NewList(
+		func() int { return len(names) },
+		func() fyne.CanvasObject { return widget.NewLabel("") },
+		func(id widget.ListItemID, os fyne.CanvasObject) {
+			os.(*widget.Label).SetText(names[id])
+		},
 	)
-	scrollclients.Resize(fyne.NewSize(500, 400))
-	scrollclients.Move(fyne.NewPos(10, 50))
+	listFulClients.Resize(fyne.NewSize(500, 400))
+	listFulClients.Move(fyne.NewPos(10, 50))
 
 	btn1 := widget.NewButton(">", func() { fmt.Println(">") })
 	btn1.Resize(fyne.NewSize(20, 20))
@@ -119,7 +99,7 @@ func ConfScreen() {
 	cont := container.NewWithoutLayout(
 		searchbarcode,
 		searchlastname,
-		scrollclients,
+		listFulClients,
 		btn1,
 		btn2,
 		scrollclientstrening,

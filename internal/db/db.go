@@ -1,23 +1,49 @@
 package db
 
 import (
-	"context"
 	"fmt"
 	"log"
+	"os"
+	"time"
 
-	"github.com/jackc/pgx/v5"
+	"github.com/Gromp-13/IronGym/internal/db/repository"
+	"github.com/joho/godotenv"
 )
+
+type User struct {
+	ID          int32
+	LastName    string
+	FirstName   string
+	MiddleName  string
+	PhoneNumber string
+	BirthDate   time.Time
+	CardBarcode string
+}
 
 func Conectdb() {
 
-	conn, err := pgx.Connect(context.Background(), "postgres://postgres:@localhost:5432/irongumdb")
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Ошибка загрузки .env файла")
+	}
+	DBURL := os.Getenv("DB_URL")
+	if DBURL == "" {
+		log.Fatal("DB_URL не задан")
+	}
+
+	bd, err = repository.New(DBURL)
 	if err != nil {
 		log.Fatal(err.Error())
 	}
 
-	defer conn.Close(context.Background())
+	data, err := bd.GetClients()
+	if err != nil {
+		log.Fatal(err.Error())
+	}
 
-	row := conn.QueryRow(context.Background(), "SELECT * FROM clients;")
-	fmt.Println(row)
+	for _, item := range data {
+		fmt.Printf("%d: %s, lastname: %d, firstname: %d, middlename: %d, phonenumber: %d, birthdate: %d, cardbarcode: %d",
+			item.ID, item.LastName, item.FirstName, item.MiddleName, item.PhoneNumber, item.BirthDate, item.CardBarcode)
+	}
 
 }
