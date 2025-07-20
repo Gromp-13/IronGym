@@ -53,3 +53,7 @@ func (repo *PGRepo) NewClients(item models.Client) error {
 	)
 	return err
 }
+
+func (repo *PGRepo) Close() {
+	repo.pool.Close()
+}

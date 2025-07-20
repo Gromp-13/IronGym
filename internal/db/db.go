@@ -9,6 +9,8 @@ import (
 	"github.com/joho/godotenv"
 )
 
+var Repo *repository.PGRepo
+
 func Connectdb() []models.Client {
 
 	err := godotenv.Load()
@@ -20,16 +22,23 @@ func Connectdb() []models.Client {
 		log.Fatal("DB_URL не задан")
 	}
 
-	repo, err := repository.New(DBURL)
-	if err != nil {
-		log.Fatal(err.Error())
+	var errRepo error
+	Repo, errRepo = repository.New(DBURL)
+	if errRepo != nil {
+		log.Fatal(errRepo.Error())
 	}
 
-	clients, err := repo.GetClient()
+	clients, err := Repo.GetClient()
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	return clients
 
+}
+
+func RepoClose() {
+	if Repo != nil {
+		Repo.Close()
+	}
 }
