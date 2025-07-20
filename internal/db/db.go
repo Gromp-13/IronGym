@@ -1,26 +1,15 @@
 package db
 
 import (
-	"fmt"
 	"log"
 	"os"
-	"time"
 
 	"github.com/Gromp-13/IronGym/internal/db/repository"
+	"github.com/Gromp-13/IronGym/internal/models"
 	"github.com/joho/godotenv"
 )
 
-type User struct {
-	ID          int32
-	LastName    string
-	FirstName   string
-	MiddleName  string
-	PhoneNumber string
-	BirthDate   time.Time
-	CardBarcode string
-}
-
-func Conectdb() {
+func Connectdb() []models.Client {
 
 	err := godotenv.Load()
 	if err != nil {
@@ -31,19 +20,16 @@ func Conectdb() {
 		log.Fatal("DB_URL не задан")
 	}
 
-	bd, err := repository.New(DBURL)
+	repo, err := repository.New(DBURL)
 	if err != nil {
 		log.Fatal(err.Error())
 	}
 
-	data, err := bd.GetClient()
+	clients, err := repo.GetClient()
 	if err != nil {
-		log.Fatal(err.Error())
+		log.Fatal(err)
 	}
 
-	for _, item := range data {
-		fmt.Printf("%d: %s, lastname: %d, firstname: %d, middlename: %d, phonenumber: %d, birthdate: %d, cardbarcode: %d\n",
-			item.ID, item.LastName, item.FirstName, item.MiddleName, item.PhoneNumber, item.BirthDate, item.CardBarcode)
-	}
+	return clients
 
 }

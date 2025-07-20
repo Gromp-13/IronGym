@@ -38,12 +38,12 @@ func (repo *PGRepo) GetClient() ([]models.Client, error) {
 	return data, nil
 }
 
-func (repo *PGRepo) CreateClients(item models.Client) error {
+func (repo *PGRepo) NewClients(item models.Client) error {
 	repo.mu.Lock()
 	defer repo.mu.Unlock()
 	_, err := repo.pool.Exec(context.Background(), `
 	INSERT INTO clients (lastname, firstname, middlename, phonenumber, birthdate, cardbarcode)
-	VALUES $1, $2, $3, $4, $5, $6`,
+	VALUES ($1, $2, $3, $4, $5, $6)`,
 		item.LastName,
 		item.FirstName,
 		item.MiddleName,

@@ -8,6 +8,7 @@ import (
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
+	"github.com/Gromp-13/IronGym/internal/db"
 	"github.com/Gromp-13/IronGym/internal/ui/screens"
 )
 
@@ -17,13 +18,15 @@ func ConfScreen() {
 	windowMaster.Resize(fyne.NewSize(1100, 700))
 	myApp.Settings().SetTheme(theme.DarkTheme())
 
-	file_item1 := fyne.NewMenuItem("новый клиет", func() {
+	clients := db.Connectdb()
+
+	newClientItem := fyne.NewMenuItem("новый клиет", func() {
 		screens.NewClientScreen(myApp)
 	})
-	file_item2 := fyne.NewMenuItem("продажа абонемента", func() {
+	sellSubscriptionItem := fyne.NewMenuItem("продажа абонемента", func() {
 		fmt.Println("продажа абонемента")
 	})
-	menu1 := fyne.NewMenu("Клиенты", file_item1, file_item2)
+	menu1 := fyne.NewMenu("Клиенты", newClientItem, sellSubscriptionItem)
 
 	main_menu := fyne.NewMainMenu(menu1)
 	windowMaster.SetMainMenu(main_menu)
@@ -38,18 +41,20 @@ func ConfScreen() {
 	searchbarcode.Move(fyne.NewPos(170, 5))
 	searchbarcode.SetPlaceHolder("Поиск по карте")
 
-	names := []string{"Rnt", "wcbh", "EOVIMEO", "EVPM", "EOWNV", "wovnjuow", "wovnwoun", "wpvmiwpjij",
-		"oenvbe", "pwjvh", "kmvoiewn", "w;kmvowin", "powmvoi", "w[ojvmiwjh]", "pwomvih", "[wpovj0wv90]"}
-
-	listFulClients := widget.NewList(
-		func() int { return len(names) },
-		func() fyne.CanvasObject { return widget.NewLabel("") },
-		func(id widget.ListItemID, os fyne.CanvasObject) {
-			os.(*widget.Label).SetText(names[id])
+	ClientList := widget.NewList(
+		func() int {
+			return len(clients)
+		},
+		func() fyne.CanvasObject {
+			return widget.NewLabel("template")
+		},
+		func(i widget.ListItemID, o fyne.CanvasObject) {
+			client := clients[i]
+			o.(*widget.Label).SetText(client.LastName + " " + client.FirstName)
 		},
 	)
-	listFulClients.Resize(fyne.NewSize(500, 400))
-	listFulClients.Move(fyne.NewPos(10, 50))
+	ClientList.Resize(fyne.NewSize(500, 400))
+	ClientList.Move(fyne.NewPos(10, 50))
 
 	btn1 := widget.NewButton(">", func() { fmt.Println(">") })
 	btn1.Resize(fyne.NewSize(20, 20))
@@ -99,7 +104,7 @@ func ConfScreen() {
 	cont := container.NewWithoutLayout(
 		searchbarcode,
 		searchlastname,
-		listFulClients,
+		ClientList,
 		btn1,
 		btn2,
 		scrollclientstrening,
