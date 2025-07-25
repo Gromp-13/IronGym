@@ -10,6 +10,7 @@ type Client struct {
 	PhoneNumber string
 	BirthDate   time.Time
 	CardBarcode string
+	GenderID    int32
 }
 
 type Subscriptions struct {
@@ -18,4 +19,9 @@ type Subscriptions struct {
 	StartDate    time.Time
 	DurationDays int32
 	EndDate      time.Time
+}
+
+type Gender struct {
+	ID          int32
+	Description string
 }

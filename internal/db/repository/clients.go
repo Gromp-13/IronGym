@@ -8,7 +8,7 @@ import (
 
 func (repo *PGRepo) GetClient() ([]models.Client, error) {
 	rows, err := repo.pool.Query(context.Background(), `
-	SELECT id, lastname, firstname, middlename, phonenumber, birthdate, cardbarcode 
+	SELECT id, lastname, firstname, middlename, phonenumber, birthdate, cardbarcode, gender 
 	FROM clients;
 `)
 	if err != nil {
@@ -27,6 +27,7 @@ func (repo *PGRepo) GetClient() ([]models.Client, error) {
 			&item.PhoneNumber,
 			&item.BirthDate,
 			&item.CardBarcode,
+			&item.GenderID,
 		)
 		if err != nil {
 			return nil, err
