@@ -44,13 +44,14 @@ func (repo *PGRepo) NewClients(item models.Client) error {
 	defer repo.mu.Unlock()
 	_, err := repo.pool.Exec(context.Background(), `
 	INSERT INTO clients (lastname, firstname, middlename, phonenumber, birthdate, cardbarcode)
-	VALUES ($1, $2, $3, $4, $5, $6)`,
+	VALUES ($1, $2, $3, $4, $5, $6, $7)`,
 		item.LastName,
 		item.FirstName,
 		item.MiddleName,
 		item.PhoneNumber,
 		item.BirthDate,
 		item.CardBarcode,
+		item.GenderID,
 	)
 	return err
 }

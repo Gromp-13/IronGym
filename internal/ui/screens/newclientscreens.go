@@ -8,6 +8,7 @@ import (
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
+	datepicker "fyne.io/fyne/v2/widget/datepicker"
 	"github.com/Gromp-13/IronGym/internal/db"
 	"github.com/Gromp-13/IronGym/internal/models"
 )
@@ -23,7 +24,7 @@ func NewClientScreen(a fyne.App) {
 		{"Мужской", 30},
 		{"Женский", 30},
 		{"Школьный", 30},
-		{"Студенчиский", 30},
+		{"Студенческий", 30},
 		{"Мужской 3 месяца", 90},
 		{"Мужской пол года", 1800},
 		{"Мужской на год", 365},
@@ -32,14 +33,16 @@ func NewClientScreen(a fyne.App) {
 		{"Женский на год", 365},
 	}
 	var selectedSubscription SubscriptionOption
+	var genderID int32
+	var selectedBirthDate time.Time
 
 	options := make([]string, len(subscriptionOption))
-	for i, o := range subscriptionOption{
+	for i, o := range subscriptionOption {
 		options[i] = o.Label
 	}
 
 	windowNCS := a.NewWindow("Новый клиент")
-	windowNCS.Resize(fyne.NewSize(400, 500))
+	windowNCS.Resize(fyne.NewSize(400, 600))
 	a.Settings().SetTheme(theme.DarkTheme())
 
 	label := widget.NewLabel("РЕГИСТРАЦИЯ")
@@ -66,14 +69,41 @@ func NewClientScreen(a fyne.App) {
 	phone.Move(fyne.NewPos(50, 230))
 	phone.SetPlaceHolder("Номер телефона")
 
-	birthdate := widget.NewEntry()
-	birthdate.Resize(fyne.NewSize(300, 40))
-	birthdate.Move(fyne.NewPos(50, 290))
-	birthdate.SetPlaceHolder("Штрихкод карты")
+	barcode := widget.NewEntry()
+	barcode.Resize(fyne.NewSize(300, 40))
+	barcode.Move(fyne.NewPos(50, 290))
+	barcode.SetPlaceHolder("Штрихкод карты")
+
+	birthDatePicker := datepicker.NewDatePicker(func(t time.Time) {
+		selectedBirthDate = t
+	})
+	birthDatePicker.Resize(fyne.NewSize(300, 40))
+	birthDatePicker.Move(fyne.NewPos(50, 350))
+	birthDatePicker.PlaceHolder = "Дата рождения"
+
+	genderSel := widget.NewSelect(
+		[]string{
+			"Мужской",
+			"Женский",
+		},
+		func(s string) {
+			switch s {
+			case "Мужской":
+				genderID = 1
+			case "Женский":
+				genderID = 2
+			default:
+				genderID = 0
+			}
+		},
+	)
+	genderSel.Resize(fyne.NewSize(300, 40))
+	genderSel.Move(fyne.NewPos(50, 410))
+	genderSel.PlaceHolder = "Выберите пол"
 
 	selectSub := widget.NewSelect(options,
 		func(s string) {
-			for _, o := range subscriptionOption{
+			for _, o := range subscriptionOption {
 				if o.Label == s {
 					selectedSubscription = o
 					break
@@ -81,67 +111,71 @@ func NewClientScreen(a fyne.App) {
 			}
 		})
 	selectSub.Resize(fyne.NewSize(300, 40))
-	selectSub.Move(fyne.NewPos(50, 350))
-	selectSub.PlaceHolder = "Выберити абонемент"
+	selectSub.Move(fyne.NewPos(50, 470))
+	selectSub.PlaceHolder = "Выберите абонемент"
 
-	save := widget.NewButton("Сохранить", 
-	func() {
-		if userlname.Text == "" || userfname.Text == ""{
-			fmt.Println("Фамилия и имя обязательны")
-			return
-		}
+	save := widget.NewButton("Сохранить",
+		func() {
+			if userlname.Text == "" || userfname.Text == "" {
+				fmt.Println("Фамилия и имя обязательны")
+				return
+			}
 
-		parsedDate, err := time.Parse("2006-01-02", birthdate.Text)
-		if err != nil {
-			fmt.Println("Используйте ГГГГ-ММ-ДД")
-			return
-		}
+			if selectedBirthDate.IsZero() {
+				fmt.Println("Выберите дату рождения")
+				return
+			}
 
-		if selectedSubscription.Label == ""{
-			fmt.Println("Выберите абонемент")
-			return
-		}
-		client := models.Client{
-			LastName: userlname.Text,
-			FirstName: userfname.Text,
-			MiddleName: patronymic.Text,
-			PhoneNumber: phone.Text,
-			BirthDate: parsedDate,
-			CardBarcode: birthdate.Text,
-			GenderID: 0,
-		}
+			if selectedSubscription.Label == "" {
+				fmt.Println("Выберите абонемент")
+				return
+			}
+			client := models.Client{
+				LastName:    userlname.Text,
+				FirstName:   userfname.Text,
+				MiddleName:  patronymic.Text,
+				PhoneNumber: phone.Text,
+				BirthDate:   selectedBirthDate,
+				CardBarcode: barcode.Text,
+				GenderID:    genderID,
+			}
 
-		err = db.Repo.NewClients(client)
-		if err != nil{
-			fmt.Println("Ошибка при добавлении клиента", err)
-			return
-		}
+			err := db.Repo.NewClients(client)
+			if err != nil {
+				fmt.Println("Ошибка при добавлении клиента", err)
+				return
+			}
 
-		createdClients, err, := db.Repo.GetLastClientByBarcode(client.CardBarcode)
-		if err != nil{
-			fmt.Println("Ошибка при поиске клиента:", err)
-			return
-		}
+			createdClient, err := db.Repo.GetLastClientByBarcode(client.CardBarcode)
+			if err != nil {
+				fmt.Println("Ошибка при поиске клиента:", err)
+				return
+			}
 
-		now := time.Now()
-		sub := models.Subscriptions{
-			ClientID: createdClients.ID,
-			StartDate: now,
-			DurationDays: selectedSubscription.Duration,
-			EndDate: now.AddDate(0, 0, selectedSubscription.Duration),
-		}
+			if genderID == 0 {
+				fmt.Println("Выберите пол")
+				return
+			}
 
-		err = db.Repo.NewSubscription(sub)
-		if err != nil{
-			fmt.Println("Ошибка при создании абонимента:", err)
-			return
-		}
+			now := time.Now()
+			sub := models.Subscriptions{
+				ClientID:     createdClient.ID,
+				StartDate:    now,
+				DurationDays: int32(selectedSubscription.Duration),
+				EndDate:      now.AddDate(0, 0, selectedSubscription.Duration),
+			}
 
-		fmt.Println("Клиент и абонимент успешно добавленны")
-		windowNCS.Close()
-	})
+			err = db.Repo.NewSubscription(sub)
+			if err != nil {
+				fmt.Println("Ошибка при создании абонимента:", err)
+				return
+			}
+
+			fmt.Println("Клиент и абонимент успешно добавленны")
+			windowNCS.Close()
+		})
 	save.Resize(fyne.NewSize(200, 40))
-	save.Move(fyne.NewPos(100, 410))
+	save.Move(fyne.NewPos(100, 530))
 
 	cont := container.NewWithoutLayout(
 		label,
@@ -149,8 +183,10 @@ func NewClientScreen(a fyne.App) {
 		userfname,
 		patronymic,
 		phone,
-		birthdate,
-		selectpas,
+		barcode,
+		birthDatePicker,
+		genderSel,
+		selectSub,
 		save,
 	)
 

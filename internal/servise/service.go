@@ -1,0 +1,5 @@
+package servise
+
+func ClientService() {
+
+}
