@@ -6,7 +6,6 @@ require (
 	fyne.io/fyne/v2 v2.6.2
 	github.com/jackc/pgx/v4 v4.18.3
 	github.com/joho/godotenv v1.5.1
-	github.com/tobbee/fyne-datepicker v0.0.0-20250228213856-56e2da68536e
 )
 
 require (

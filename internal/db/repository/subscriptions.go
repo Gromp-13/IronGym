@@ -9,7 +9,7 @@ import (
 func (repo *PGRepo) NewSubscription(sub models.Subscriptions) error {
 	_, err := repo.pool.Exec(context.Background(), `
 	INSERT INTO subscriptions (clientid, startdate, durationdays, enddate)
-	VALUESc($1, $2, $3, $4)`,
+	VALUES ($1, $2, $3, $4)`,
 		sub.ClientID,
 		sub.StartDate,
 		sub.DurationDays,
@@ -34,7 +34,7 @@ func (repo *PGRepo) GetLastClientByBarcode(barcode string) (models.Client, error
 		&c.PhoneNumber,
 		&c.BirthDate,
 		&c.CardBarcode,
-		&c.GenderID,
+		&c.Gender,
 	)
 	return c, err
 }

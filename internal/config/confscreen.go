@@ -18,7 +18,7 @@ func ConfScreen() {
 	windowMaster.Resize(fyne.NewSize(1100, 700))
 	myApp.Settings().SetTheme(theme.DarkTheme())
 
-	clients := db.Connectdb()
+	clients, _ := db.Repo.GetClient()
 
 	newClientItem := fyne.NewMenuItem("новый клиет", func() {
 		screens.NewClientScreen(myApp)
@@ -50,7 +50,7 @@ func ConfScreen() {
 		},
 		func(i widget.ListItemID, o fyne.CanvasObject) {
 			client := clients[i]
-			o.(*widget.Label).SetText(client.LastName + " " + client.FirstName)
+			o.(*widget.Label).SetText(client.LastName + " " + client.FirstName + " " + client.MiddleName)
 		},
 	)
 	ClientList.Resize(fyne.NewSize(500, 400))
@@ -113,7 +113,6 @@ func ConfScreen() {
 
 	windowMaster.SetContent(cont)
 	windowMaster.Show()
-	windowMaster.SetMaster()
 	myApp.Run()
 
 }

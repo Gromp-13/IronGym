@@ -27,7 +27,7 @@ func (repo *PGRepo) GetClient() ([]models.Client, error) {
 			&item.PhoneNumber,
 			&item.BirthDate,
 			&item.CardBarcode,
-			&item.GenderID,
+			&item.Gender,
 		)
 		if err != nil {
 			return nil, err
@@ -43,7 +43,7 @@ func (repo *PGRepo) NewClients(item models.Client) error {
 	repo.mu.Lock()
 	defer repo.mu.Unlock()
 	_, err := repo.pool.Exec(context.Background(), `
-	INSERT INTO clients (lastname, firstname, middlename, phonenumber, birthdate, cardbarcode)
+	INSERT INTO clients (lastname, firstname, middlename, phonenumber, birthdate, cardbarcode, gender)
 	VALUES ($1, $2, $3, $4, $5, $6, $7)`,
 		item.LastName,
 		item.FirstName,
@@ -51,7 +51,7 @@ func (repo *PGRepo) NewClients(item models.Client) error {
 		item.PhoneNumber,
 		item.BirthDate,
 		item.CardBarcode,
-		item.GenderID,
+		item.Gender,
 	)
 	return err
 }

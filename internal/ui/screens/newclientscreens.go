@@ -2,6 +2,7 @@ package screens
 
 import (
 	"fmt"
+	"strings"
 	"time"
 
 	"fyne.io/fyne/v2"
@@ -32,8 +33,7 @@ func NewClientScreen(a fyne.App) {
 		{"Женский на год", 365},
 	}
 	var selectedSubscription SubscriptionOption
-	var genderID int32
-	var selectedBirthDate time.Time
+	var gender int32
 
 	options := make([]string, len(subscriptionOption))
 	for i, o := range subscriptionOption {
@@ -73,24 +73,22 @@ func NewClientScreen(a fyne.App) {
 	barcode.Move(fyne.NewPos(50, 280))
 	barcode.SetPlaceHolder("Штрихкод карты")
 
+	// --- Дата рождения (автоформат + проверка возраста) ---
 	birthDate := widget.NewEntry()
 	birthDate.Resize(fyne.NewSize(300, 40))
 	birthDate.Move(fyne.NewPos(50, 340))
-	birthDate.SetPlaceHolder("Введите в фармате ГГГГ-ММ-ДД")
+	birthDate.SetPlaceHolder("ГГГГ-ММ-ДД")
 
 	genderSel := widget.NewSelect(
-		[]string{
-			"Мужской",
-			"Женский",
-		},
+		[]string{"Мужской", "Женский"},
 		func(s string) {
 			switch s {
 			case "Мужской":
-				genderID = 1
+				gender = 1
 			case "Женский":
-				genderID = 2
+				gender = 2
 			default:
-				genderID = 0
+				gender = 0
 			}
 		},
 	)
@@ -98,14 +96,15 @@ func NewClientScreen(a fyne.App) {
 	genderSel.Move(fyne.NewPos(50, 410))
 	genderSel.PlaceHolder = "Выберите пол"
 
-	selectSub := widget.NewSelect(options, func(s string) {
-		for _, o := range subscriptionOption {
-			if o.Label == s {
-				selectedSubscription = o
-				break
+	selectSub := widget.NewSelect(options,
+		func(s string) {
+			for _, o := range subscriptionOption {
+				if o.Label == s {
+					selectedSubscription = o
+					break
+				}
 			}
-		}
-	})
+		})
 	selectSub.Resize(fyne.NewSize(300, 40))
 	selectSub.Move(fyne.NewPos(50, 470))
 	selectSub.PlaceHolder = "Выберите абонемент"
@@ -115,30 +114,47 @@ func NewClientScreen(a fyne.App) {
 			fmt.Println("Фамилия и имя обязательны")
 			return
 		}
-		if selectedBirthDate.IsZero() {
-			fmt.Println("Выберите дату рождения")
+		if birthDate.Text == "" {
+			fmt.Println("Введите дату рождения")
 			return
 		}
+
+		parsedDate, err := time.Parse("2006-01-02", strings.TrimSpace(birthDate.Text))
+		if err != nil {
+			fmt.Println("Неверный формат даты. Используйте ГГГГ-ММ-ДД")
+			return
+		}
+
+		// Проверка на будущее и возраст
+		if parsedDate.After(time.Now()) {
+			fmt.Println("Дата рождения не может быть в будущем")
+			return
+		}
+		age := int(time.Since(parsedDate).Hours() / 24 / 365)
+		if age < 10 {
+			fmt.Println("Клиенту должно быть не меньше 10 лет")
+			return
+		}
+
 		if selectedSubscription.Label == "" {
 			fmt.Println("Выберите абонемент")
 			return
 		}
-		if genderID == 0 {
+		if gender == 0 {
 			fmt.Println("Выберите пол")
 			return
 		}
-
 		client := models.Client{
 			LastName:    userlname.Text,
 			FirstName:   userfname.Text,
 			MiddleName:  patronymic.Text,
 			PhoneNumber: phone.Text,
-			//BirthDate:   birthDate.,
+			BirthDate:   parsedDate,
 			CardBarcode: barcode.Text,
-			GenderID:    genderID,
+			Gender:      gender,
 		}
 
-		err := db.Repo.NewClients(client)
+		err = db.Repo.NewClients(client)
 		if err != nil {
 			fmt.Println("Ошибка при добавлении клиента:", err)
 			return
