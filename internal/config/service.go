@@ -4,33 +4,12 @@ import (
 	"fmt"
 
 	"fyne.io/fyne/v2"
-	"fyne.io/fyne/v2/app"
 	"fyne.io/fyne/v2/container"
-	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
 	"github.com/Gromp-13/IronGym/internal/db"
-	"github.com/Gromp-13/IronGym/internal/ui/screens"
 )
 
-func ConfScreen() {
-	myApp := app.New()
-	windowMaster := myApp.NewWindow("IronGym")
-	windowMaster.Resize(fyne.NewSize(1100, 700))
-	myApp.Settings().SetTheme(theme.DarkTheme())
-
-	clients, _ := db.Repo.GetClient()
-
-	newClientItem := fyne.NewMenuItem("новый клиет", func() {
-		screens.NewClientScreen(myApp)
-	})
-	sellSubscriptionItem := fyne.NewMenuItem("продажа абонемента", func() {
-		fmt.Println("продажа абонемента")
-	})
-	menu1 := fyne.NewMenu("Клиенты", newClientItem, sellSubscriptionItem)
-
-	main_menu := fyne.NewMainMenu(menu1)
-	windowMaster.SetMainMenu(main_menu)
-
+func Service() fyne.CanvasObject {
 	searchlastname := widget.NewEntry()
 	searchlastname.Resize(fyne.NewSize(150, 36))
 	searchlastname.Move(fyne.NewPos(10, 5))
@@ -40,6 +19,8 @@ func ConfScreen() {
 	searchbarcode.Resize(fyne.NewSize(150, 36))
 	searchbarcode.Move(fyne.NewPos(170, 5))
 	searchbarcode.SetPlaceHolder("Поиск по карте")
+
+	clients, _ := db.Repo.GetClient()
 
 	ClientList := widget.NewList(
 		func() int {
@@ -111,8 +92,5 @@ func ConfScreen() {
 		onetimesub,
 	)
 
-	windowMaster.SetContent(cont)
-	windowMaster.Show()
-	myApp.Run()
-
+	return cont
 }

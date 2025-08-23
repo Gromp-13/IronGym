@@ -1,5 +1,0 @@
-package servise
-
-func ClientService() {
-
-}
