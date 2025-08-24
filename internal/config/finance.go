@@ -176,6 +176,150 @@ func Finance() fyne.CanvasObject {
 	Male_3_Total.TextStyle = fyne.TextStyle{Italic: true}
 	Male_3_Total.Move(fyne.NewPos(950, 260))
 
+	labelMale_6 := widget.NewLabel("Мужской пол года")
+	labelMale_6.TextStyle = fyne.TextStyle{Italic: true}
+	labelMale_6.Move(fyne.NewPos(5, 300))
+
+	Male_6_Month := widget.NewLabel("00.00")
+	Male_6_Month.TextStyle = fyne.TextStyle{Italic: true}
+	Male_6_Month.Move(fyne.NewPos(350, 300))
+
+	Male_6_Quarter := widget.NewLabel("00.00")
+	Male_6_Quarter.TextStyle = fyne.TextStyle{Italic: true}
+	Male_6_Quarter.Move(fyne.NewPos(500, 300))
+
+	Male_6_Half := widget.NewLabel("00.00")
+	Male_6_Half.TextStyle = fyne.TextStyle{Italic: true}
+	Male_6_Half.Move(fyne.NewPos(650, 300))
+
+	Male_6_Year := widget.NewLabel("00.00")
+	Male_6_Year.TextStyle = fyne.TextStyle{Italic: true}
+	Male_6_Year.Move(fyne.NewPos(800, 300))
+
+	Male_6_Total := widget.NewLabel("00.00")
+	Male_6_Total.TextStyle = fyne.TextStyle{Italic: true}
+	Male_6_Total.Move(fyne.NewPos(950, 300))
+
+	labelMaleYear := widget.NewLabel("Мужской на год")
+	labelMaleYear.TextStyle = fyne.TextStyle{Italic: true}
+	labelMaleYear.Move(fyne.NewPos(5, 340))
+
+	Male_Year_Month := widget.NewLabel("00.00")
+	Male_Year_Month.TextStyle = fyne.TextStyle{Italic: true}
+	Male_Year_Month.Move(fyne.NewPos(350, 340))
+
+	Male_Year_Quarter := widget.NewLabel("00.00")
+	Male_Year_Quarter.TextStyle = fyne.TextStyle{Italic: true}
+	Male_Year_Quarter.Move(fyne.NewPos(500, 340))
+
+	Male_Year_Half := widget.NewLabel("00.00")
+	Male_Year_Half.TextStyle = fyne.TextStyle{Italic: true}
+	Male_Year_Half.Move(fyne.NewPos(650, 340))
+
+	Male_Year_Year := widget.NewLabel("00.00")
+	Male_Year_Year.TextStyle = fyne.TextStyle{Italic: true}
+	Male_Year_Year.Move(fyne.NewPos(800, 340))
+
+	Male_Year_Total := widget.NewLabel("00.00")
+	Male_Year_Total.TextStyle = fyne.TextStyle{Italic: true}
+	Male_Year_Total.Move(fyne.NewPos(950, 340))
+
+	labelFemale_3 := widget.NewLabel("Женский 3 месяца")
+	labelFemale_3.TextStyle = fyne.TextStyle{Italic: true}
+	labelFemale_3.Move(fyne.NewPos(5, 380))
+
+	Female_3_Month := widget.NewLabel("00.00")
+	Female_3_Month.TextStyle = fyne.TextStyle{Italic: true}
+	Female_3_Month.Move(fyne.NewPos(350, 380))
+
+	Female_3_Quarter := widget.NewLabel("00.00")
+	Female_3_Quarter.TextStyle = fyne.TextStyle{Italic: true}
+	Female_3_Quarter.Move(fyne.NewPos(500, 380))
+
+	Female_3_Half := widget.NewLabel("00.00")
+	Female_3_Half.TextStyle = fyne.TextStyle{Italic: true}
+	Female_3_Half.Move(fyne.NewPos(650, 380))
+
+	Female_3_Year := widget.NewLabel("00.00")
+	Female_3_Year.TextStyle = fyne.TextStyle{Italic: true}
+	Female_3_Year.Move(fyne.NewPos(800, 380))
+
+	Female_3_Total := widget.NewLabel("00.00")
+	Female_3_Total.TextStyle = fyne.TextStyle{Italic: true}
+	Female_3_Total.Move(fyne.NewPos(950, 380))
+
+	labelFemale_6 := widget.NewLabel("Женский пол года")
+	labelFemale_6.TextStyle = fyne.TextStyle{Italic: true}
+	labelFemale_6.Move(fyne.NewPos(5, 420))
+
+	Female_6_Month := widget.NewLabel("00.00")
+	Female_6_Month.TextStyle = fyne.TextStyle{Italic: true}
+	Female_6_Month.Move(fyne.NewPos(350, 420))
+
+	Female_6_Quarter := widget.NewLabel("00.00")
+	Female_6_Quarter.TextStyle = fyne.TextStyle{Italic: true}
+	Female_6_Quarter.Move(fyne.NewPos(500, 420))
+
+	Female_6_Half := widget.NewLabel("00.00")
+	Female_6_Half.TextStyle = fyne.TextStyle{Italic: true}
+	Female_6_Half.Move(fyne.NewPos(650, 420))
+
+	Female_6_Year := widget.NewLabel("00.00")
+	Female_6_Year.TextStyle = fyne.TextStyle{Italic: true}
+	Female_6_Year.Move(fyne.NewPos(800, 420))
+
+	Female_6_Total := widget.NewLabel("00.00")
+	Female_6_Total.TextStyle = fyne.TextStyle{Italic: true}
+	Female_6_Total.Move(fyne.NewPos(950, 420))
+
+	labelFemaleYear := widget.NewLabel("Женский на год")
+	labelFemaleYear.TextStyle = fyne.TextStyle{Italic: true}
+	labelFemaleYear.Move(fyne.NewPos(5, 460))
+
+	Female_Year_Month := widget.NewLabel("00.00")
+	Female_Year_Month.TextStyle = fyne.TextStyle{Italic: true}
+	Female_Year_Month.Move(fyne.NewPos(350, 460))
+
+	Female_Year_Quarter := widget.NewLabel("00.00")
+	Female_Year_Quarter.TextStyle = fyne.TextStyle{Italic: true}
+	Female_Year_Quarter.Move(fyne.NewPos(500, 460))
+
+	Female_Year_Half := widget.NewLabel("00.00")
+	Female_Year_Half.TextStyle = fyne.TextStyle{Italic: true}
+	Female_Year_Half.Move(fyne.NewPos(650, 460))
+
+	Female_Year_Year := widget.NewLabel("00.00")
+	Female_Year_Year.TextStyle = fyne.TextStyle{Italic: true}
+	Female_Year_Year.Move(fyne.NewPos(800, 460))
+
+	Female_Year_Total := widget.NewLabel("00.00")
+	Female_Year_Total.TextStyle = fyne.TextStyle{Italic: true}
+	Female_Year_Total.Move(fyne.NewPos(950, 460))
+
+	labelAll := widget.NewLabel("Всего")
+	labelAll.TextStyle = fyne.TextStyle{Italic: true}
+	labelAll.Move(fyne.NewPos(5, 550))
+
+	AllMonth := widget.NewLabel("00.00")
+	AllMonth.TextStyle = fyne.TextStyle{Italic: true}
+	AllMonth.Move(fyne.NewPos(350, 550))
+
+	AllQuarter := widget.NewLabel("00.00")
+	AllQuarter.TextStyle = fyne.TextStyle{Italic: true}
+	AllQuarter.Move(fyne.NewPos(500, 550))
+
+	AllHalf := widget.NewLabel("00.00")
+	AllHalf.TextStyle = fyne.TextStyle{Italic: true}
+	AllHalf.Move(fyne.NewPos(650, 550))
+
+	AllYear := widget.NewLabel("00.00")
+	AllYear.TextStyle = fyne.TextStyle{Italic: true}
+	AllYear.Move(fyne.NewPos(800, 550))
+
+	AllTotal := widget.NewLabel("00.00")
+	AllTotal.TextStyle = fyne.TextStyle{Italic: true}
+	AllTotal.Move(fyne.NewPos(950, 550))
+
 	cont := container.NewWithoutLayout(
 		labelSub,
 		labelMonth,
@@ -219,6 +363,42 @@ func Finance() fyne.CanvasObject {
 		Male_3_Half,
 		Male_3_Year,
 		Male_3_Total,
+		labelMale_6,
+		Male_6_Month,
+		Male_6_Quarter,
+		Male_6_Half,
+		Male_6_Year,
+		Male_6_Total,
+		labelMaleYear,
+		Male_Year_Month,
+		Male_Year_Quarter,
+		Male_Year_Half,
+		Male_Year_Year,
+		Male_Year_Total,
+		labelFemale_3,
+		Female_3_Month,
+		Female_3_Quarter,
+		Female_3_Half,
+		Female_3_Year,
+		Female_3_Total,
+		labelFemale_6,
+		Female_6_Month,
+		Female_6_Quarter,
+		Female_6_Half,
+		Female_6_Year,
+		Female_6_Total,
+		labelFemaleYear,
+		Female_Year_Month,
+		Female_Year_Quarter,
+		Female_Year_Half,
+		Female_Year_Year,
+		Female_Year_Total,
+		labelAll,
+		AllMonth,
+		AllQuarter,
+		AllHalf,
+		AllYear,
+		AllTotal,
 	)
 
 	return cont
