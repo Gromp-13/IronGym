@@ -31,6 +31,7 @@ func Config() {
 	tabs := container.NewAppTabs(
 		container.NewTabItem("Сервис", Service()),
 		container.NewTabItem("Финансы", Finance()),
+		container.NewTabItem("Абонементы", Subscriptions()),
 	)
 
 	tabs.SetTabLocation(container.TabLocationBottom)

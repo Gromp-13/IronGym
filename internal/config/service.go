@@ -2,33 +2,38 @@ package config
 
 import (
 	"fmt"
+	"strings"
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/widget"
 	"github.com/Gromp-13/IronGym/internal/db"
+	"github.com/Gromp-13/IronGym/internal/models"
 )
 
 func Service() fyne.CanvasObject {
-	searchlastname := widget.NewEntry()
-	searchlastname.Resize(fyne.NewSize(150, 36))
-	searchlastname.Move(fyne.NewPos(10, 5))
-	searchlastname.SetPlaceHolder("Поиск по фамилии")
+	searchLastname := widget.NewEntry()
+	searchLastname.Resize(fyne.NewSize(150, 36))
+	searchLastname.Move(fyne.NewPos(10, 5))
+	searchLastname.SetPlaceHolder("Поиск по фамилии")
 
-	searchbarcode := widget.NewEntry()
-	searchbarcode.Resize(fyne.NewSize(150, 36))
-	searchbarcode.Move(fyne.NewPos(170, 5))
-	searchbarcode.SetPlaceHolder("Поиск по карте")
+	searchBarcode := widget.NewEntry()
+	searchBarcode.Resize(fyne.NewSize(150, 36))
+	searchBarcode.Move(fyne.NewPos(170, 5))
+	searchBarcode.SetPlaceHolder("Поиск по карте")
 
-	clients, _ := db.Repo.GetClient()
+	// Данные
+	allClients, _ := db.Repo.GetClient()
+	clients := append([]models.Client(nil), allClients...)
+	selectedClients := []models.Client{}
 
+	leftSel := -1
+	rightSel := -1
+
+	// Левый список (из базы)
 	ClientList := widget.NewList(
-		func() int {
-			return len(clients)
-		},
-		func() fyne.CanvasObject {
-			return widget.NewLabel("template")
-		},
+		func() int { return len(clients) },
+		func() fyne.CanvasObject { return widget.NewLabel("template") },
 		func(i widget.ListItemID, o fyne.CanvasObject) {
 			client := clients[i]
 			o.(*widget.Label).SetText(client.LastName + " " + client.FirstName + " " + client.MiddleName)
@@ -36,59 +41,97 @@ func Service() fyne.CanvasObject {
 	)
 	ClientList.Resize(fyne.NewSize(500, 400))
 	ClientList.Move(fyne.NewPos(10, 50))
+	ClientList.OnSelected = func(id widget.ListItemID) { leftSel = int(id) }
+	ClientList.OnUnselected = func(id widget.ListItemID) {
+		if leftSel == int(id) {
+			leftSel = -1
+		}
+	}
 
-	btn1 := widget.NewButton(">", func() { fmt.Println(">") })
+	// Правый список (выбранные клиенты)
+	SelectedList := widget.NewList(
+		func() int { return len(selectedClients) },
+		func() fyne.CanvasObject { return widget.NewLabel("template") },
+		func(i widget.ListItemID, o fyne.CanvasObject) {
+			client := selectedClients[i]
+			o.(*widget.Label).SetText(client.LastName + " " + client.FirstName + " " + client.MiddleName)
+		},
+	)
+	SelectedList.Resize(fyne.NewSize(500, 400))
+	SelectedList.Move(fyne.NewPos(580, 50))
+	SelectedList.OnSelected = func(id widget.ListItemID) { rightSel = int(id) }
+	SelectedList.OnUnselected = func(id widget.ListItemID) {
+		if rightSel == int(id) {
+			rightSel = -1
+		}
+	}
+
+	// Кнопка >
+	btn1 := widget.NewButton(">", func() {
+		if leftSel >= 0 && leftSel < len(clients) {
+			c := clients[leftSel]
+			already := false
+			for _, s := range selectedClients {
+				if s.ID == c.ID {
+					already = true
+					break
+				}
+			}
+			if !already {
+				selectedClients = append(selectedClients, c)
+				SelectedList.Refresh()
+			}
+			ClientList.UnselectAll()
+			leftSel = -1
+		}
+	})
 	btn1.Resize(fyne.NewSize(20, 20))
 	btn1.Move(fyne.NewPos(540, 170))
 
-	btn2 := widget.NewButton("<", func() { fmt.Println("<") })
+	// Кнопка <
+	btn2 := widget.NewButton("<", func() {
+		if rightSel >= 0 && rightSel < len(selectedClients) {
+			selectedClients = append(selectedClients[:rightSel], selectedClients[rightSel+1:]...)
+			SelectedList.Refresh()
+			SelectedList.UnselectAll()
+			rightSel = -1
+		}
+	})
 	btn2.Resize(fyne.NewSize(20, 20))
 	btn2.Move(fyne.NewPos(540, 210))
 
-	scrollclientstrening := container.NewVScroll(
-		container.NewVBox(
-			widget.NewLabel("1"),
-			widget.NewLabel("2"),
-			widget.NewLabel("3"),
-			widget.NewLabel("4"),
-			widget.NewLabel("5"),
-			widget.NewLabel("6"),
-			widget.NewLabel("7"),
-			widget.NewLabel("8"),
-			widget.NewLabel("9"),
-			widget.NewLabel("10"),
-			widget.NewLabel("11"),
-			widget.NewLabel("12"),
-			widget.NewLabel("13"),
-			widget.NewLabel("14"),
-			widget.NewLabel("15"),
-			widget.NewLabel("16"),
-			widget.NewLabel("17"),
-			widget.NewLabel("18"),
-			widget.NewLabel("19"),
-			widget.NewLabel("20"),
-			widget.NewLabel("21"),
-			widget.NewLabel("22"),
-			widget.NewLabel("23"),
-			widget.NewLabel("24"),
-			widget.NewLabel("25"),
-			widget.NewLabel("26"),
-		),
-	)
-	scrollclientstrening.Resize(fyne.NewSize(500, 400))
-	scrollclientstrening.Move(fyne.NewPos(580, 50))
+	// Поиск
+	applyFilters := func() {
+		ln := strings.ToLower(strings.TrimSpace(searchLastname.Text))
+		bc := strings.ToLower(strings.TrimSpace(searchBarcode.Text))
 
+		clients = clients[:0]
+		for _, c := range allClients {
+			okLast := ln == "" || strings.Contains(strings.ToLower(c.LastName), ln)
+			okBar := bc == "" || strings.Contains(strings.ToLower(c.CardBarcode), bc)
+			if okLast && okBar {
+				clients = append(clients, c)
+			}
+		}
+		ClientList.UnselectAll()
+		leftSel = -1
+		ClientList.Refresh()
+	}
+	searchLastname.OnChanged = func(string) { applyFilters() }
+	searchBarcode.OnChanged = func(string) { applyFilters() }
+
+	// Кнопка "разовый"
 	onetimesub := widget.NewButton("Разовый абонемент", func() { fmt.Println("Разовый") })
 	onetimesub.Resize(fyne.NewSize(175, 40))
 	onetimesub.Move(fyne.NewPos(875, 475))
 
 	cont := container.NewWithoutLayout(
-		searchbarcode,
-		searchlastname,
+		searchBarcode,
+		searchLastname,
 		ClientList,
 		btn1,
 		btn2,
-		scrollclientstrening,
+		SelectedList,
 		onetimesub,
 	)
 
