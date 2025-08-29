@@ -12,5 +12,6 @@ func main() {
 	defer db.RepoClose()
 
 	config.Config()
+	// комент для теста
 
 }
