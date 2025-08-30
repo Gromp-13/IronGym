@@ -21,10 +21,10 @@ type SubscriptionOption struct {
 
 func NewClientScreen(a fyne.App) {
 	var subscriptionOption = []SubscriptionOption{
-		{"Мужской", 30},
-		{"Женский", 30},
-		{"Школьный", 30},
-		{"Студенческий", 30},
+		{"Мужской", 31},
+		{"Женский", 31},
+		{"Школьный", 31},
+		{"Студенческий", 31},
 		{"Мужской 3 месяца", 90},
 		{"Мужской пол года", 180},
 		{"Мужской на год", 365},
@@ -73,7 +73,6 @@ func NewClientScreen(a fyne.App) {
 	barcode.Move(fyne.NewPos(50, 280))
 	barcode.SetPlaceHolder("Штрихкод карты")
 
-	// --- Дата рождения (автоформат + проверка возраста) ---
 	birthDate := widget.NewEntry()
 	birthDate.Resize(fyne.NewSize(300, 40))
 	birthDate.Move(fyne.NewPos(50, 340))

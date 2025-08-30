@@ -11,17 +11,46 @@ type Client struct {
 	BirthDate   time.Time
 	CardBarcode string
 	Gender      int32
+	StatusID    int32
 }
 
-type Subscriptions struct {
-	ID           int32
-	ClientID     int32
-	StartDate    time.Time
-	DurationDays int32
-	EndDate      time.Time
-}
-
-type Genders struct {
+type Gender struct {
 	ID          int32
 	Description string
+}
+
+type ClientStatus struct {
+	ID   int32
+	Name string
+}
+
+type MemberShip struct {
+	ID           int32
+	Name         string
+	Price        int32
+	DurationDays int32
+}
+
+type ClientMemberShip struct {
+	ID           int32
+	ClientID     int32
+	MembershipID int32
+	StartDate    time.Time
+	PaidAmount   int32
+	CreatedAT    time.Time
+	StatusID     int32
+}
+
+type MembershipStatus struct {
+	ID   int32
+	Name string
+}
+
+type Payments struct {
+	ID           int32
+	ClientID     int32
+	MembershipID int32
+	Amount       int32
+	PaymentDate  time.Time
+	Method       string
 }
