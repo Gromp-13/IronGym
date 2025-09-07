@@ -6,7 +6,7 @@ import (
 	"github.com/Gromp-13/IronGym/internal/models"
 )
 
-func (repo *PGRepo) GetGenders() ([]models.Genders, error) {
+func (repo *PGRepo) GetGenders() ([]models.Gender, error) {
 	rows, err := repo.pool.Query(context.Background(), `
 	SELECT id, description FROM genders ORDER BY id;
 `)
@@ -15,9 +15,9 @@ func (repo *PGRepo) GetGenders() ([]models.Genders, error) {
 	}
 	defer rows.Close()
 
-	var genders []models.Genders
+	var genders []models.Gender
 	for rows.Next() {
-		var g models.Genders
+		var g models.Gender
 		err := rows.Scan(&g.ID, &g.Description)
 		if err != nil {
 			return nil, err

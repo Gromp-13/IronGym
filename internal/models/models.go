@@ -24,14 +24,14 @@ type ClientStatus struct {
 	Name string
 }
 
-type MemberShip struct {
+type Membership struct {
 	ID           int32
 	Name         string
 	Price        int32
 	DurationDays int32
 }
 
-type ClientMemberShip struct {
+type ClientMembership struct {
 	ID           int32
 	ClientID     int32
 	MembershipID int32
@@ -46,7 +46,7 @@ type MembershipStatus struct {
 	Name string
 }
 
-type Payments struct {
+type Payment struct {
 	ID           int32
 	ClientID     int32
 	MembershipID int32

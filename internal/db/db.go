@@ -28,7 +28,7 @@ func Connectdb() []models.Client {
 		log.Fatal(errRepo.Error())
 	}
 
-	clients, err := Repo.GetClient()
+	clients, err := Repo.GetClients()
 	if err != nil {
 		log.Fatal(err)
 	}

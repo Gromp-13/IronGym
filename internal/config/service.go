@@ -23,7 +23,7 @@ func Service() fyne.CanvasObject {
 	searchBarcode.SetPlaceHolder("Поиск по карте")
 
 	// Данные
-	allClients, _ := db.Repo.GetClient()
+	allClients, _ := db.Repo.GetClients()
 	clients := append([]models.Client(nil), allClients...)
 	selectedClients := []models.Client{}
 

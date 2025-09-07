@@ -17,21 +17,25 @@ import (
 type SubscriptionOption struct {
 	Label    string
 	Duration int
+	Price    int32
+	ID       int32 // ID абонемента из БД
 }
 
 func NewClientScreen(a fyne.App) {
+	// !!! Тестовые данные. В реальном коде лучше загружать из таблицы memberships
 	var subscriptionOption = []SubscriptionOption{
-		{"Мужской", 31},
-		{"Женский", 31},
-		{"Школьный", 31},
-		{"Студенческий", 31},
-		{"Мужской 3 месяца", 90},
-		{"Мужской пол года", 180},
-		{"Мужской на год", 365},
-		{"Женский 3 месяца", 90},
-		{"Женский пол года", 180},
-		{"Женский на год", 365},
+		{"Мужской", 31, 3000, 1},
+		{"Женский", 31, 3000, 2},
+		{"Школьный", 31, 2000, 3},
+		{"Студенческий", 31, 2500, 4},
+		{"Мужской 3 месяца", 90, 8000, 5},
+		{"Женский 3 месяца", 90, 8000, 6},
+		{"Мужской пол года", 180, 15000, 7},
+		{"Женский пол года", 180, 15000, 8},
+		{"Мужской на год", 365, 28000, 9},
+		{"Женский на год", 365, 28000, 10},
 	}
+
 	var selectedSubscription SubscriptionOption
 	var gender int32
 
@@ -124,11 +128,11 @@ func NewClientScreen(a fyne.App) {
 			return
 		}
 
-		// Проверка на будущее и возраст
 		if parsedDate.After(time.Now()) {
 			fmt.Println("Дата рождения не может быть в будущем")
 			return
 		}
+
 		age := int(time.Since(parsedDate).Hours() / 24 / 365)
 		if age < 10 {
 			fmt.Println("Клиенту должно быть не меньше 10 лет")
@@ -139,10 +143,12 @@ func NewClientScreen(a fyne.App) {
 			fmt.Println("Выберите абонемент")
 			return
 		}
+
 		if gender == 0 {
 			fmt.Println("Выберите пол")
 			return
 		}
+
 		client := models.Client{
 			LastName:    userlname.Text,
 			FirstName:   userfname.Text,
@@ -151,14 +157,14 @@ func NewClientScreen(a fyne.App) {
 			BirthDate:   parsedDate,
 			CardBarcode: barcode.Text,
 			Gender:      gender,
+			StatusID:    1, // активный клиент по умолчанию
 		}
 
-		err = db.Repo.NewClients(client)
+		err = db.Repo.NewClient(client)
 		if err != nil {
 			fmt.Println("Ошибка при добавлении клиента:", err)
 			return
 		}
-
 		createdClient, err := db.Repo.GetLastClientByBarcode(client.CardBarcode)
 		if err != nil {
 			fmt.Println("Ошибка при поиске клиента:", err)
@@ -166,14 +172,16 @@ func NewClientScreen(a fyne.App) {
 		}
 
 		now := time.Now()
-		sub := models.Subscriptions{
+		cm := models.ClientMembership{
 			ClientID:     createdClient.ID,
+			MembershipID: selectedSubscription.ID,
 			StartDate:    now,
-			DurationDays: int32(selectedSubscription.Duration),
-			EndDate:      now.AddDate(0, 0, selectedSubscription.Duration),
+			PaidAmount:   selectedSubscription.Price,
+			CreatedAT:    now,
+			StatusID:     1, // активный абонемент по умолчанию
 		}
 
-		err = db.Repo.NewSubscription(sub)
+		err = db.Repo.NewClientMembership(cm)
 		if err != nil {
 			fmt.Println("Ошибка при создании абонемента:", err)
 			return
@@ -182,6 +190,7 @@ func NewClientScreen(a fyne.App) {
 		fmt.Println("Клиент и абонемент успешно добавлены")
 		windowNCS.Close()
 	})
+
 	save.Resize(fyne.NewSize(200, 40))
 	save.Move(fyne.NewPos(100, 530))
 
