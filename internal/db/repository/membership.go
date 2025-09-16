@@ -67,3 +67,20 @@ func (repo *PGRepo) UpdateMembershipPrice(id int32, newPrice int32) error {
 
 	return err
 }
+
+func (repo *PGRepo) GetMembershipPrice(id int32) (int32, error) {
+	repo.mu.Lock()
+	defer repo.mu.Unlock()
+
+	var price int32
+	err := repo.pool.QueryRow(
+		context.Background(),
+		`SELECT price FROM memberships WHERE id = $1`,
+		id,
+	).Scan(&price)
+	if err != nil {
+		return 0, err
+	}
+
+	return price, nil
+}

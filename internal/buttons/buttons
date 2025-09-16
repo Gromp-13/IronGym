@@ -1,0 +1,30 @@
+package buttons
+
+import (
+	"fmt"
+	"log"
+	"strconv"
+
+	"fyne.io/fyne/v2/widget"
+	"github.com/Gromp-13/IronGym/internal/db"
+)
+
+func UpdateMembershipPriceUI(id int32, entry *widget.Entry, label *widget.Label) {
+	newPriceStr := entry.Text
+	newPrice, err := strconv.Atoi(newPriceStr)
+	if err != nil {
+		fmt.Printf("Ошибка: некорректное число для абонемента %d: %v\n", id, err)
+		return
+	}
+
+	// Вызов вашей уже существующей функции для обновления базы
+	err = db.Repo.UpdateMembershipPrice(id, int32(newPrice))
+	if err != nil {
+		fmt.Printf("Ошибка обновления цены абонемента %d: %v\n", id, err)
+		return
+	}
+
+	// Обновляем отображаемую "старую цену"
+	label.SetText(strconv.Itoa(newPrice))
+	fmt.Printf("Цена для абонемента %d успешно обновлена на %d\n", id, newPrice)
+}
